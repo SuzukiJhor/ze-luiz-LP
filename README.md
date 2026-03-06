@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zé Luiz do Candeeiro — Official Website
 
-## Getting Started
+A modern artistic and institutional website built to present the trajectory, poetry, and musical work of **Zé Luiz do Candeeiro**.
 
-First, run the development server:
+The project blends **education, poetry, and music** through a minimalist and immersive digital experience.
+
+---
+
+## ✨ Overview
+
+This website serves as a digital space to explore:
+
+* The **teaching journey** and reflections on education
+* **Poetry and musical compositions**
+* Cultural and artistic expression inspired by Brazilian roots
+* Selected writings and artistic fragments
+
+The visual identity focuses on **dark aesthetics, typography, and motion**, creating a poetic and immersive atmosphere.
+
+---
+
+## 🚀 Tech Stack
+
+The project is built with modern web technologies:
+
+* **Next.js 16** – React framework with App Router
+* **React 19**
+* **Tailwind CSS** – utility-first styling
+* **Framer Motion** – animations and transitions
+* **Lucide React** – modern icon library
+* **Next/Image** – optimized image loading
+
+---
+
+## 🎨 Design Philosophy
+
+The interface design is inspired by:
+
+* Minimalist editorial websites
+* Artistic portfolios
+* Dark cinematic aesthetics
+* Elegant typography with atmospheric visuals
+
+The goal is to create a **digital stage** where words, music, and education coexist.
+
+---
+
+## ⚙️ Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/your-username/ze-luiz-site.git
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in the browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📦 Dependencies
 
-To learn more about Next.js, take a look at the following resources:
+Main libraries used:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+framer-motion
+lucide-react
+tailwindcss
+next
+react
+react-dom
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧠 Future Improvements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Planned features for future versions:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* CMS for managing poems and articles
+* Audio player for musical compositions
+* Blog system for essays and reflections
+* Admin authentication
+* Content API integration
+* SEO optimization
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 👤 Author
+
+Developed for the artistic project of **Zé Luiz do Candeeiro**.
+
+Website built with modern web technologies to showcase poetry, music, and educational work.
