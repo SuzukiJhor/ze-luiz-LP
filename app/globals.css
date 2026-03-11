@@ -109,3 +109,7 @@
 .animate-fade-in-up {
   animation: var(--animation-fade-in-up);
 }
+
+html {
+  scroll-behavior: smooth;
+}

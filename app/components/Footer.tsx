@@ -10,6 +10,18 @@ export function Footer() {
 
                 <div className="flex space-x-6 text-white/40 text-sm">
                     <p>&copy; {new Date().getFullYear()} Zé Luiz. Todos os direitos reservados.</p>
+                    <span className="hidden md:inline">|</span>
+                    <p>
+                        Desenvolvido por{" "}
+                        <a
+                            href=""
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white/60 hover:text-white transition-colors"
+                        >
+                            J. Suzuki  Design e Tecnologia LTDA
+                        </a>
+                    </p>
                 </div>
             </div>
         </footer>
