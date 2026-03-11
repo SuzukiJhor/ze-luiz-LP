@@ -2,15 +2,22 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, LogOut, LayoutDashboard, Moon, Sun } from 'lucide-react'
-import { useState, useEffect, useTransition } from 'react'
 import { logoutAction } from '@/app/actions/auth'
-import { useTheme } from 'next-themes'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useTransition } from 'react'
+import {
+  Menu,
+  X,
+  LogOut,
+  LayoutDashboard,
+  Instagram,
+  Youtube,
+  Music,
+  FileBadge
+} from 'lucide-react'
 
 export function Navbar () {
   const location = usePathname()
-  const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -28,6 +35,29 @@ export function Navbar () {
     { name: 'Início', path: '/' },
     { name: 'Docência', path: '/docente' },
     { name: 'Poesia & Música', path: '/poesia' }
+  ]
+
+  const socialLinks = [
+    {
+      name: 'Instagram',
+      icon: <Instagram size={18} />,
+      href: 'https://www.instagram.com/zlcandeeiro'
+    },
+    {
+      name: 'YouTube',
+      icon: <Youtube size={18} />,
+      href: 'https://www.youtube.com/c/Z%C3%A9LuizdoCandeeiro'
+    },
+    {
+      name: 'Músicas',
+      icon: <Music size={18} />,
+      href: 'https://onerpm.link/275878497747'
+    },
+    {
+      name: 'Currículo Lattes',
+      icon: <FileBadge size={18} />,
+      href: 'https://buscatextual.cnpq.br/buscatextual/visualizacv.do;jsessionid=EC806F7C38EFCC5F4DB7A82D33B41A0F.buscatextual_0'
+    }
   ]
 
   if (!mounted) return null
@@ -76,6 +106,21 @@ export function Navbar () {
                 {link.name}
               </Link>
             ))}
+
+            <div className='hidden lg:flex items-center space-x-4 mr-6'>
+              {socialLinks.map(social => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-muted hover:text-primary transition-all duration-300 hover:scale-110'
+                  title={social.name}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
 
             <div className='flex items-center space-x-4 pl-8 border-l border-border'>
               <Link
@@ -126,6 +171,20 @@ export function Navbar () {
               </div>
               <span>Tema {theme === 'dark' ? 'Claro' : 'Escuro'}</span>
             </button> */}
+
+            <div className='flex items-center justify-around pt-6 border-t border-border'>
+              {socialLinks.map(social => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='p-3 bg-surface-muted rounded-full text-muted hover:text-primary transition-colors'
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
 
             {navLinks.map(link => (
               <Link
