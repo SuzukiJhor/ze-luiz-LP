@@ -5,21 +5,22 @@ import Image from 'next/image'
 import mandala from '../assets/profile03.jpg'
 
 export default function ObraSection () {
-  // Variantes para orquestrar a entrada dos elementos
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15 } // Delay entre cada elemento
+      transition: { staggerChildren: 0.15 }
     }
   }
+
+  const easeProfessional = [0.22, 1, 0.36, 1]
 
   const fadeInUp: any = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: [0.42, 0, 0.58, 1] }
+      transition: { duration: 0.8, ease: easeProfessional }
     }
   }
 
@@ -28,12 +29,17 @@ export default function ObraSection () {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 1, ease: [0.42, 0, 0.58, 1] }
+      transition: { duration: 1, ease: easeProfessional }
     }
   }
 
   return (
-    <section id="obra" className='py-24 px-6 md:px-12 lg:px-24 bg-background overflow-hidden'>
+    <section
+      id='obra'
+      className={`relative py-24 px-6 md:px-12 lg:px-24 overflow-hidden
+        /* MANTIDO O FUNDO ESCURO: Transição para um Azul/Grafite Profundo */
+        bg-linear-to-b from-background via-[#0a0f1a] to-[#020617]`}
+    >
       <motion.div
         className='max-w-7xl mx-auto'
         initial='hidden'
@@ -53,7 +59,7 @@ export default function ObraSection () {
             initial={{ scaleX: 0, originX: 0 }}
             whileInView={{ scaleX: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className='h-0.5 flex-1 bg-primary/20 hidden md:block'
+            className='h-0.5 flex-1 bg-primary/30 hidden md:block'
           />
         </div>
 
@@ -69,7 +75,7 @@ export default function ObraSection () {
               </motion.span>
               <motion.blockquote
                 variants={fadeInUp}
-                className='border-l-4 border-primary pl-6 italic text-foreground text-3xl md:text-4xl font-medium leading-tight'
+                className='border-l-4 border-primary pl-6 italic text-slate-100 text-3xl md:text-4xl font-medium leading-tight'
               >
                 “Nasci e me criei Cavalcante, mas a poesia me quis candeeiro”.
               </motion.blockquote>
@@ -77,7 +83,7 @@ export default function ObraSection () {
 
             <motion.div
               variants={containerVariants}
-              className='space-y-6 text-muted-foreground leading-relaxed text-lg'
+              className='space-y-6 text-slate-400 leading-relaxed text-lg'
             >
               <motion.p variants={fadeInUp}>
                 O porquê do Candeeiro é uma pergunta recorrente: desde quando o
@@ -119,19 +125,19 @@ export default function ObraSection () {
             </motion.div>
           </div>
 
-          {/* Lado da Mandala (Imagem) */}
           <motion.div
             variants={scaleIn}
             className='lg:col-span-5 relative group order-2 lg:order-1'
           >
-            {/* Efeito de Aura Pulsante atrás da Mandala */}
+            <div className='absolute inset-0 bg-white rounded-full blur-[110px] opacity-90 pointer-events-none scale-90' />
+
             <motion.div
               animate={{
                 scale: [1, 1.1, 1],
-                opacity: [0.1, 0.2, 0.1]
+                opacity: [0.2, 0.4, 0.2]
               }}
-              transition={{ duration: 5, repeat: Infinity }}
-              className='absolute inset-0 bg-primary/20 rounded-full blur-[100px]'
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              className='absolute inset-0 bg-primary rounded-full blur-[130px] pointer-events-none'
             />
 
             <div className='relative z-10 flex justify-center'>
@@ -145,7 +151,7 @@ export default function ObraSection () {
                   width={500}
                   height={500}
                   priority
-                  className='w-full max-w-sm md:max-w-md drop-shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)]'
+                  className='w-full max-w-sm md:max-w-md drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-300'
                 />
               </motion.div>
             </div>
