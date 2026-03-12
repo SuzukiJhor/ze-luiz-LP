@@ -70,7 +70,7 @@ export default function Hero() {
           transition={{ duration: 1 }}
         >
           <h2 className='text-primary tracking-[0.35em] uppercase mb-6 text-xs md:text-sm font-medium'>
-            Cultura & Educação
+            Arte & Educação
           </h2>
 
           <h1 className='text-4xl md:text-6xl lg:text-7xl font-semibold font-display mb-8 leading-[1.1] tracking-tight'>
