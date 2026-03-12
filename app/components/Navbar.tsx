@@ -18,6 +18,7 @@ import {
 
 export function Navbar () {
   const location = usePathname()
+  const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -32,9 +33,16 @@ export function Navbar () {
   }, [])
 
   const navLinks = [
-    { name: 'Início', path: '/' },
-    { name: 'Docência', path: '/docente' },
-    { name: 'Poesia & Música', path: '/poesia' }
+    { name: 'Início', path: '/', isSection: false },
+    { name: 'Docência', path: '/docente', isSection: false },
+    { name: 'Poesia & Música', path: '/poesia', isSection: false },
+    { name: 'A Obra', path: '/#obra', sectionId: 'obra', isSection: true },
+    {
+      name: 'Contato',
+      path: '/#contato',
+      sectionId: 'contato',
+      isSection: true
+    }
   ]
 
   const socialLinks = [
@@ -59,6 +67,26 @@ export function Navbar () {
       href: 'https://buscatextual.cnpq.br/buscatextual/visualizacv.do;jsessionid=EC806F7C38EFCC5F4DB7A82D33B41A0F.buscatextual_0'
     }
   ]
+
+  const handleNavClick = (e: React.MouseEvent, link: typeof navLinks[0]) => {
+    if (link.isSection && pathname === '/') {
+      e.preventDefault()
+      const element = document.getElementById(link.sectionId!)
+      if (element) {
+        const offset = 80
+        const bodyRect = document.body.getBoundingClientRect().top
+        const elementRect = element.getBoundingClientRect().top
+        const elementPosition = elementRect - bodyRect
+        const offsetPosition = elementPosition - offset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+      setMobileMenuOpen(false)
+    }
+  }
 
   if (!mounted) return null
 
@@ -97,6 +125,7 @@ export function Navbar () {
               <Link
                 key={link.path}
                 href={link.path}
+                onClick={e => handleNavClick(e, link)}
                 className={`text-sm font-medium tracking-wide transition-all duration-300 hover:text-primary ${
                   location === link.path
                     ? 'text-primary'
@@ -190,7 +219,10 @@ export function Navbar () {
               <Link
                 key={link.path}
                 href={link.path}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={e => {
+                  handleNavClick(e, link)
+                  setMobileMenuOpen(false)
+                }}
                 className={`text-2xl font-serif tracking-wide transition-colors ${
                   location === link.path ? 'text-primary' : 'text-muted'
                 }`}

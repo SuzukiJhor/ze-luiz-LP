@@ -15,7 +15,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Ze Luiz do Candeeiro',
-  description: 'Zé Luiz do Candeeiro é a beleza do cotidiano traduzida em arte'
+  description: 'Zé Luiz do Candeeiro é a beleza do cotidiano traduzida em arte',
+  icons: {
+    icon: '/assets/profile03.jpg',
+    apple: '/assets/profile03.jpg'
+  }
 }
 
 export default function RootLayout ({

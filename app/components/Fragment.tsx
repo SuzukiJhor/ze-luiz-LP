@@ -32,6 +32,8 @@ export default function Fragment () {
     fetchData()
   }, [])
 
+  if (!posts.length || loading) return null
+
   return (
     <section className='py-24 md:py-32 bg-surface'>
       <div className='max-w-7xl mx-auto px-6'>
