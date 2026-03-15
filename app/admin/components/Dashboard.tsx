@@ -17,7 +17,7 @@ import { AnimatePresence } from 'framer-motion'
 import { useEffect, useState, useTransition } from 'react'
 import DashboardSkeleton from './DashboardSkeleton'
 
-export default function Dashboard () {
+export default function Dashboard() {
   const [posts, setPosts] = useState<Post[]>([])
   const [isPending, startTransition] = useTransition()
   const [showModal, setShowModal] = useState(false)

@@ -16,7 +16,6 @@ export default function PoesiaPostsSection () {
       try {
         const allPosts = await getPostsAction()
 
-        // Aplicando seus filtros: Seção POESIA, Publicado e com Subtítulo
         const filtered = allPosts.filter(
           post =>
             post.section === 'POESIA' &&
@@ -35,8 +34,8 @@ export default function PoesiaPostsSection () {
 
     fetchData()
   }, [])
-
-  return (
+  console.log('Posts de Poesia:', posts) // Log para verificar os dados carregados
+  return (  
     <section className='relative py-32 px-6 bg-surface overflow-hidden'>
       <div
         className='absolute top-0 left-0 w-full h-56 

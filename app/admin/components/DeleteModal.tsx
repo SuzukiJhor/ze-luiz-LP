@@ -36,14 +36,14 @@ export function DeleteModal ({
         <div className='flex gap-3'>
           <button
             onClick={onClose}
-            className='flex-1 px-4 py-2 rounded-xl hover:bg-white/5 transition-colors'
+            className='flex-1 px-4 py-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer'
           >
             Cancelar
           </button>
           <button
             onClick={onConfirm}
             disabled={isPending}
-            className='flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50'
+            className='flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer shadow-lg shadow-red-500/20'
           >
             {isPending ? (
               'Excluindo...'

@@ -2,7 +2,7 @@ import { Post } from '@/app/types/post'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Edit, FileText, Globe, Lock, PenTool, Trash2 } from 'lucide-react'
 
-export default function PostsList ({
+export default function PostsList({
   posts,
   refreshData,
   handleDelete,
@@ -52,11 +52,10 @@ export default function PostsList ({
                   </td>
                   <td className='p-6 text-sm'>
                     <span
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold ${
-                        item.section === 'POESIA'
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold ${item.section === 'POESIA'
                           ? 'bg-purple-500/10 text-purple-400'
                           : 'bg-blue-500/10 text-blue-400'
-                      }`}
+                        }`}
                     >
                       {item.section}
                     </span>
@@ -68,9 +67,8 @@ export default function PostsList ({
                           togglePublishAction(item.id).then(refreshData)
                         )
                       }
-                      className={`flex items-center gap-2 text-sm ${
-                        item.published ? 'text-green-400' : 'text-orange-400'
-                      }`}
+                      className={`flex items-center gap-2 text-sm ${item.published ? 'text-green-400' : 'text-orange-400'
+                        } cursor-pointer`}
                     >
                       {item.published ? (
                         <Globe size={14} />
@@ -84,13 +82,13 @@ export default function PostsList ({
                     <div className='flex justify-end gap-2 '>
                       <button
                         onClick={() => handleEdit(item)}
-                        className='p-2 bg-white/10 rounded-lg text-white '
+                        className='p-2 bg-white/10 rounded-lg text-white cursor-pointer hover:bg-white/20 transition-colors'
                       >
                         <Edit size={18} />
                       </button>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className='p-2 hover:bg-red-500/10 rounded-lg text-white/70 hover:text-red-500'
+                        className='p-2 hover:bg-red-500/10 rounded-lg text-white/70 hover:text-red-500 cursor-pointer transition-colors'
                       >
                         <Trash2 size={18} />
                       </button>
