@@ -13,8 +13,8 @@ export async function sendEmail (prevState: any, formData: FormData) {
     const data = await resend.emails.send({
       //   from: 'Contato <onboarding@resend.dev>',
       from: 'Site <contato@zeluizdocandeeiro.com.br>',
-    //    to: "contato@zeluizdocandeeiro.com.br",
-      to: "contato@zeluizdocandeeiro.com.br",
+      //    to: "contato@zeluizdocandeeiro.com.br",
+      to: 'contato@zeluizdocandeeiro.com.br',
       replyTo: email as string[] | string,
       subject: `Mensagem de ${nome}`,
       html: `
@@ -23,6 +23,7 @@ export async function sendEmail (prevState: any, formData: FormData) {
       `
     })
     console.log('Email enviado com sucesso:', data)
+    if (!data) return { error: true }
     return { success: true }
   } catch (error) {
     return { error: true }
