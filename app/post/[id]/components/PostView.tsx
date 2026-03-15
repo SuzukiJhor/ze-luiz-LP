@@ -26,8 +26,6 @@ export default function PostView({
   const prevPost = posts[currentIndex - 1]
   const nextPost = posts[currentIndex + 1]
 
-  console.log('Posts disponíveis:', posts)
-
   return (
     <div className='min-h-screen bg-surface text-white flex flex-col'>
       <PostImage post={post} />

@@ -7,21 +7,18 @@ import { getPostsAction } from '@/app/actions/posts'
 import PoesiaPostTitleSection from './PoesiaPostTitleSection'
 import EmptyPosts from './EmptyState'
 
-export default function PoesiaPostsSection () {
+export default function PoesiaPostsSection() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchData () {
+    async function fetchData() {
       try {
         const allPosts = await getPostsAction()
 
         const filtered = allPosts.filter(
           post =>
-            post.section === 'POESIA' &&
-            post.published &&
-            post.subtitle !== null &&
-            post.subtitle !== ''
+            post.published
         ) as Post[]
 
         setPosts(filtered)
@@ -34,8 +31,8 @@ export default function PoesiaPostsSection () {
 
     fetchData()
   }, [])
-  console.log('Posts de Poesia:', posts) // Log para verificar os dados carregados
-  return (  
+
+  return (
     <section className='relative py-32 px-6 bg-surface overflow-hidden'>
       <div
         className='absolute top-0 left-0 w-full h-56 

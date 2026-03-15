@@ -14,7 +14,7 @@ export default function Page() {
   const params = useParams()
 
   const [post, setPost] = useState<Post | null>(null)
-  const [posts, setPosts] = useState<any[]>([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
 
   const isPoesia = post?.section === 'POESIA'
@@ -32,7 +32,11 @@ export default function Page() {
 
         const allPosts = await getPostsAction()
 
-        setPosts(allPosts)
+        const filteredPosts = allPosts.filter(
+          post => post.published === true
+        ) as Post[]
+
+        setPosts(filteredPosts)
 
         const filtered = allPosts.filter(
           post => post.published === true

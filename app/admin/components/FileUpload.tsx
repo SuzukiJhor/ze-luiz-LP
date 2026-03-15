@@ -121,9 +121,31 @@ export function FileUpload({ type, value, onChange, onUploadingChange }: FileUpl
             )}
 
             {value && type === 'audio' && (
-                <audio controls className="w-full">
-                    <source src={value} />
-                </audio>
+                <div className="relative flex items-center gap-3 border border-border rounded-xl p-3 bg-surface-muted">
+
+                    <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-purple-500/10">
+                        <Music size={20} className="text-purple-400" />
+                    </div>
+
+                    <div className="flex flex-col text-xs text-muted flex-1">
+                        <span className="font-medium text-white">
+                            Arquivo de áudio
+                        </span>
+
+                        <audio controls className="w-full mt-1">
+                            <source src={value} />
+                        </audio>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => onChange(null)}
+                        className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-lg cursor-pointer hover:bg-black/80 transition"
+                    >
+                        <X size={16} />
+                    </button>
+
+                </div>
             )}
 
             {value && type === 'pdf' && (

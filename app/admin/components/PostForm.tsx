@@ -42,7 +42,7 @@ export function PostForm({ onClose, onSave, isPending }: PostFormProps) {
 
           <button
             onClick={onClose}
-            className='text-sm text-muted hover:text-foreground flex items-center gap-1 transition-colors'
+            className='text-sm text-muted hover:text-foreground flex items-center gap-1 transition-colors cursor-pointer'
           >
             <X size={16} /> Cancelar
           </button>
