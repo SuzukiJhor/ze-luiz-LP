@@ -1,13 +1,21 @@
 'use client'
 
+import { Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { Mail, Send } from 'lucide-react'
+import SubmitButton from './SubmitButtonContact'
+import { sendEmail } from '../actions/sendEmail'
+import { useEffect, useState, useActionState } from 'react'
 
-export default function ContatoSection () {
+export default function ContatoSection() {
+  const [nome, setNome] = useState('')
+  const [email, setEmail] = useState('')
+  const [mensagem, setMensagem] = useState('')
+  const [state, formAction] = useActionState(sendEmail, null)
+  const [sent, setSent] = useState(false)
+
   const azulCandeeiro = 'text-primary'
   const azulBotao = 'bg-primary hover:bg-primary/90'
 
-  // Variantes para animação de entrada
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -34,19 +42,32 @@ export default function ContatoSection () {
     }
   }
 
+  useEffect(() => {
+    if (state?.success) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSent(true)
+      setNome('')
+      setEmail('')
+      setMensagem('')
+    }
+  }, [state?.success])
+
   return (
-    <section id="contato" className='relative py-24 px-6 md:px-12 lg:px-24 bg-linear-to-b from-background via-[#0a0f1a] to-[#020617] overflow-hidden'>
+    <section
+      id="contato"
+      className="relative py-24 px-6 md:px-12 lg:px-24 bg-linear-to-b from-background via-[#0a0f1a] to-[#020617] overflow-hidden"
+    >
       <motion.div
-        className='max-w-7xl mx-auto'
-        initial='hidden'
-        whileInView='visible'
+        className="max-w-7xl mx-auto"
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24 items-start'>
-          {/* Coluna de Informações */}
-          <motion.div className='space-y-6 md:space-y-8' variants={itemLeft}>
-            <header className='space-y-4'>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24 items-start">
+
+          <motion.div className="space-y-6 md:space-y-8" variants={itemLeft}>
+            <header className="space-y-4">
               <motion.h2
                 variants={itemLeft}
                 className={`text-5xl md:text-7xl font-black tracking-tighter ${azulCandeeiro} uppercase leading-none`}
@@ -55,7 +76,7 @@ export default function ContatoSection () {
               </motion.h2>
               <motion.p
                 variants={itemLeft}
-                className='text-2xl md:text-4xl font-serif italic text-slate-100 leading-tight md:leading-snug'
+                className="text-2xl md:text-4xl font-serif italic text-slate-100 leading-tight md:leading-snug"
               >
                 Adquirir livros ou outras mídias? Levar a luz do Candeeiro para
                 seu evento cultural ou acadêmico?
@@ -64,105 +85,132 @@ export default function ContatoSection () {
 
             <motion.p
               variants={itemLeft}
-              className='text-lg md:text-xl text-slate-400 leading-relaxed max-w-md'
+              className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-md"
             >
               Impressões? Sentimentos? Reflexões acadêmicas? É prazer falar
               contigo!
             </motion.p>
 
-            <motion.div variants={itemLeft} className='pt-4'>
+            <motion.div variants={itemLeft} className="pt-4">
               <a
-                href='mailto:contato@zeluizdocandeeiro.com.br'
+                href="mailto:contato@zeluizdocandeeiro.com.br"
                 className={`inline-flex items-center gap-3 text-lg md:text-2xl font-semibold ${azulCandeeiro} hover:brightness-125 transition-all break-all group`}
               >
                 <motion.div
                   whileHover={{ rotate: 15, scale: 1.1 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
-                  <Mail size={24} className='shrink-0' />
+                  <Mail size={24} className="shrink-0" />
                 </motion.div>
                 contato@zeluizdocandeeiro.com.br
               </a>
             </motion.div>
           </motion.div>
 
-          {/* Coluna do Formulário - Glassmorphism com Animação */}
           <motion.div
             variants={itemRight}
             whileHover={{ y: -5 }}
-            className='bg-white/5 backdrop-blur-md p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden'
+            className="bg-white/5 backdrop-blur-md p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden"
           >
-            {/* Brilho laranja sutil animado */}
             <motion.div
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.1, 0.15, 0.1]
               }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-              className='absolute -top-24 -right-24 w-64 h-64 bg-[#c26b2b] rounded-full blur-[100px] pointer-events-none'
+              className="absolute -top-24 -right-24 w-64 h-64 bg-[#c26b2b] rounded-full blur-[100px] pointer-events-none"
             />
 
-            <form className='space-y-6 relative z-10'>
-              <div className='grid grid-cols-1 gap-6'>
-                <div className='space-y-2'>
+            {!sent && (
+              <form action={formAction} className="space-y-6 relative z-10">
+                <div className="grid grid-cols-1 gap-6">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="nome"
+                      className={`text-xs uppercase tracking-widest font-bold ${azulCandeeiro}`}
+                    >
+                      Nome
+                    </label>
+
+                    <input
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      placeholder="Como se chama?"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-primary transition-all focus:ring-1 focus:ring-primary/30"
+                      value={nome}
+                      onChange={e => setNome(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="email"
+                      className={`text-xs uppercase tracking-widest font-bold ${azulCandeeiro}`}
+                    >
+                      E-mail
+                    </label>
+
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="seu@email.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-primary transition-all focus:ring-1 focus:ring-primary/30"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
                   <label
-                    htmlFor='nome'
+                    htmlFor="mensagem"
                     className={`text-xs uppercase tracking-widest font-bold ${azulCandeeiro}`}
                   >
-                    Nome
+                    Mensagem
                   </label>
-                  <input
-                    type='text'
-                    id='nome'
-                    placeholder='Como se chama?'
-                    className='w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-primary transition-all focus:ring-1 focus:ring-primary/30'
+
+                  <textarea
+                    id="mensagem"
+                    name="mensagem"
+                    rows={4}
+                    placeholder="Escreva aqui..."
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-primary transition-all resize-none focus:ring-1 focus:ring-primary/30"
+                    value={mensagem}
+                    onChange={e => setMensagem(e.target.value)}
                   />
                 </div>
 
-                <div className='space-y-2'>
-                  <label
-                    htmlFor='email'
-                    className={`text-xs uppercase tracking-widest font-bold ${azulCandeeiro}`}
-                  >
-                    E-mail
-                  </label>
-                  <input
-                    type='email'
-                    id='email'
-                    placeholder='seu@email.com'
-                    className='w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-primary transition-all focus:ring-1 focus:ring-primary/30'
-                  />
-                </div>
-              </div>
-
-              <div className='space-y-2'>
-                <label
-                  htmlFor='mensagem'
-                  className={`text-xs uppercase tracking-widest font-bold ${azulCandeeiro}`}
-                >
-                  Mensagem
-                </label>
-                <textarea
-                  id='mensagem'
-                  rows={4}
-                  placeholder='Escreva aqui...'
-                  className='w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-primary transition-all resize-none focus:ring-1 focus:ring-primary/30'
-                ></textarea>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type='submit'
-                className={`w-full ${azulBotao} text-white font-black tracking-widest py-5 rounded-xl flex items-center justify-center gap-3 transition-all group shadow-xl shadow-primary/10`}
-              >
-                ENVIAR MENSAGEM
-                <Send
-                  size={20}
-                  className='group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform'
+                <SubmitButton
+                  className={`w-full ${azulBotao} text-white font-black tracking-widest py-5 rounded-xl flex items-center justify-center gap-3 transition-all group shadow-xl shadow-primary/10`}
                 />
-              </motion.button>
-            </form>
+
+                {state?.error && (
+                  <p className="text-red-400 text-sm text-center">
+                    ❌ Erro ao enviar mensagem. Tente novamente.
+                  </p>
+                )}
+              </form>
+            )}
+
+            {sent && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="relative z-10 flex flex-col items-center justify-center text-center py-12 space-y-4"
+              >
+                <h3 className="text-2xl md:text-3xl font-bold text-green-400">
+                  ✨ Obrigado pela mensagem!
+                </h3>
+
+                <p className="text-slate-300 max-w-sm">
+                  Recebemos seu contato e em breve retornaremos.
+                  <br />
+                  O Candeeiro agradece sua atenção.
+                </p>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </motion.div>
