@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from './components/ThemeProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,12 +16,12 @@ export const metadata: Metadata = {
   title: 'Ze Luiz do Candeeiro',
   description: 'Zé Luiz do Candeeiro é a beleza do cotidiano traduzida em arte',
   icons: {
-    icon: '/assets/profile03.jpg',
-    apple: '/assets/profile03.jpg'
+    icon: '/mandala-remove.png',
+    apple: '/mandala-remove.png'
   }
 }
 
-export default function RootLayout ({
+export default function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
