@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { Playfair_Display, Inter } from 'next/font/google'
 import './globals.css'
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' })
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

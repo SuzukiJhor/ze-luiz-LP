@@ -3,8 +3,9 @@
 import { prisma } from '../lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { PostSection } from '@prisma/client'
+import sanitizeHtml from 'sanitize-html'
 
-export async function getPostsAction () {
+export async function getPostsAction() {
   try {
     const posts = await prisma.post.findMany({
       orderBy: { createdAt: 'desc' }
@@ -16,12 +17,27 @@ export async function getPostsAction () {
   }
 }
 
-export async function savePostAction (formData: FormData) {
+export async function savePostAction(formData: FormData) {
   const id = formData.get('id')
 
   const title = formData.get('title') as string
   const subtitle = formData.get('subtitle') as string
-  const content = formData.get('content') as string
+  const rawContent = formData.get('content') as string
+
+  const content = sanitizeHtml(rawContent, {
+    allowedTags: [
+      'p', 'b', 'i', 'em', 'strong', 'u', 
+      'ul', 'ol', 'li',
+      'a', 'blockquote', 'br',
+      'h1', 'h2', 'h3', 
+      'span', 'div' 
+    ],
+    allowedAttributes: {
+      a: ['href', 'target', 'rel'],
+      span: ['style'],
+      p: ['style']
+    }
+  })
   const section = formData.get('section') as PostSection
   const category = formData.get('category') as string
   const coverImage = formData.get('coverImage') as string
@@ -70,7 +86,7 @@ export async function savePostAction (formData: FormData) {
   }
 }
 
-export async function deletePostAction (id: number | string) {
+export async function deletePostAction(id: number | string) {
   try {
     await prisma.post.delete({
       where: { id: Number(id) }
@@ -84,7 +100,7 @@ export async function deletePostAction (id: number | string) {
   }
 }
 
-export async function togglePublishAction (id: number | string) {
+export async function togglePublishAction(id: number | string) {
   try {
     const post = await prisma.post.findUnique({
       where: { id: Number(id) },

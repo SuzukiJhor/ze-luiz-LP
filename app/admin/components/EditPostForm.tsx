@@ -9,6 +9,7 @@ import {
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FileUpload } from './FileUpload'
+import { RichTextEditor } from './RichTextEditor'
 
 interface EditPostFormProps {
   post: Post
@@ -78,12 +79,9 @@ export function EditPostForm({
               />
             </div>
 
-            <textarea
-              name='content'
-              rows={12}
-              defaultValue={post.content}
-              className='w-full bg-background border border-border p-4 rounded-xl outline-none text-white'
-              required
+            <RichTextEditor
+              name="content"
+              initialValue={post.content}
             />
 
           </div>

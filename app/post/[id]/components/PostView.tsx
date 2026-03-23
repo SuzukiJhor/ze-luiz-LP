@@ -44,14 +44,12 @@ export default function PostView({
           <PostHeader post={post} />
 
           <AudioDocument post={post} />
-
           <div
             className={`
-              prose prose-invert prose-lg max-w-none leading-relaxed
-              text-muted-foreground
+              prose prose-invert prose-lg max-w-none
               ${isPoesia
-                ? 'text-center font-serif text-xl prose-p:my-6 prose-p:leading-loose'
-                : ''
+                ? 'font-serif text-center'
+                : 'font-sans text-left'
               }
             `}
           >
@@ -99,6 +97,6 @@ export default function PostView({
       </main>
 
       <div className='h-32' />
-    </div>
+    </div >
   )
 }

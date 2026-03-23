@@ -2,15 +2,13 @@
 
 import {
   X,
-  Music,
-  FileText,
-  Image as ImageIcon,
   Save,
   Send
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FileUpload } from './FileUpload'
+import { RichTextEditor } from './RichTextEditor'
 
 interface PostFormProps {
   onClose: () => void
@@ -67,13 +65,7 @@ export function PostForm({ onClose, onSave, isPending }: PostFormProps) {
               />
             </div>
 
-            <textarea
-              name='content'
-              rows={8}
-              placeholder='Escreva seu poema ou conteúdo aqui...'
-              className='w-full bg-background border border-border p-4 rounded-xl outline-none'
-              required
-            />
+            <RichTextEditor name="content" />
 
           </div>
 
