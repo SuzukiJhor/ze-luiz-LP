@@ -46,12 +46,14 @@ export default function PostView({
           <AudioDocument post={post} />
           <div
             className={`
-              prose prose-invert prose-lg max-w-none
-              ${isPoesia
-                ? 'font-serif text-center'
-                : 'font-sans text-left'
-              }
-            `}
+            prose prose-invert prose-lg max-w-none
+            prose-a:text-primary hover:prose-a:text-primary/80 prose-a:underline
+           [&_a]:text-blue-400!
+          [&_a]:underline!
+          [&_a]:decoration-blue-400/30!
+         hover:[&_a]:text-blue-300!
+            ${isPoesia ? 'font-serif text-center' : 'font-sans text-left'}
+          `}
           >
             <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </div>

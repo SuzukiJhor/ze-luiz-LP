@@ -18,7 +18,7 @@ export default function PoesiaPostsSection() {
 
         const filtered = allPosts.filter(
           post =>
-            post.published
+            post.published && post.section === 'POESIA'
         ) as Post[]
 
         setPosts(filtered)
@@ -73,7 +73,7 @@ export default function PoesiaPostsSection() {
           ) : posts.length === 0 ? (
             <EmptyPosts />
           ) : (
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
               {posts.map((post, idx) => (
                 <motion.div
                   key={post.id}

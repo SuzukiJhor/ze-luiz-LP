@@ -4,6 +4,7 @@ import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import Timeline from "../components/Timeline";
 import TextTimeline from "../components/TextTimeline";
+import DocenciaPostsSection from "./components/DocenciaPostsSection";
 
 export default function Docente() {
 
@@ -12,6 +13,7 @@ export default function Docente() {
             <Navbar />
             <Timeline />
             {/* <TextTimeline /> */}
+            <DocenciaPostsSection />
             <Footer />
         </>
     )

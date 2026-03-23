@@ -2,7 +2,7 @@
 
 import { Editor } from '@tinymce/tinymce-react'
 import { Loader2 } from 'lucide-react'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface Props {
     name: string
@@ -37,16 +37,24 @@ export function RichTextEditor({ name, initialValue = '' }: Props) {
                     menubar: false,
                     branding: false,
                     plugins: [
-                        'lists link image table code wordcount'
+                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                        'insertdatetime', 'media', 'table', 'help', 'wordcount'
                     ],
+                    link_default_target: '_blank',
+                    link_assume_external_targets: 'https',
+                    extended_valid_elements: 'a[href|target=_blank|rel=noopener noreferrer]',
                     content_style: `
                         body { 
                             background: #fafaf9;
                             color: #1c1917;                      
                         }
+                        a { color: #2563eb; text-decoration: underline; }
                     `,
                     toolbar:
-                        'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | code',
+                        'undo redo | bold italic underline | link | alignleft aligncenter alignright | bullist numlist | code',
+
+                    autolink_pattern: /^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/\/|www\.)[^\s]+$/i,
                 }}
             />
 

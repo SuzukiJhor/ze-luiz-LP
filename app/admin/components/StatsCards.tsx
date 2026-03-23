@@ -1,9 +1,9 @@
 import { Post } from '@/app/types/post'
 
-export default function StatsCards ({ posts }: { posts: Post[] }) {
+export default function StatsCards({ posts }: { posts: Post[] }) {
   return (
     <>
-      <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-16'>
+      <div className='grid grid-cols-1 md:grid-cols-5 gap-4 mb-16'>
         <div className='bg-surface border border-border p-5 rounded-2xl'>
           <p className='text-muted text-xs uppercase font-bold tracking-wider'>
             Total
@@ -35,6 +35,15 @@ export default function StatsCards ({ posts }: { posts: Post[] }) {
           </p>
           <h3 className='text-3xl font-serif mt-1 text-primary'>
             {posts.filter(p => p.section === 'POESIA').length}
+          </h3>
+        </div>
+
+        <div className='bg-surface border border-border p-5 rounded-2xl'>
+          <p className='text-muted text-xs uppercase font-bold tracking-wider'>
+            Docência
+          </p>
+          <h3 className='text-3xl font-serif mt-1 text-blue-400'>
+            {posts.filter(p => p.section === 'DOCENCIA').length}
           </h3>
         </div>
       </div>
