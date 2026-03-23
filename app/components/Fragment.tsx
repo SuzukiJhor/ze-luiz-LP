@@ -76,18 +76,19 @@ export default function Fragment() {
                 <h3 className='text-xl md:text-3xl font-bold mt-2'>
                   {item.title}
                 </h3>
-
-                <div
-                  className={`
-              prose prose-invert prose-lg max-w-none
-              ${item.section === 'POESIA'
-                      ? 'font-serif text-center'
-                      : 'font-sans text-left'
-                    }
-            `}
-                >
-                  <div dangerouslySetInnerHTML={{ __html: item.content }} />
-                </div>
+                <Link href={`/post/${item.id}`}>
+                  <div
+                    className={`
+                      prose prose-invert prose-lg max-w-none
+                      ${item.section === 'POESIA'
+                        ? 'font-serif text-center'
+                        : 'font-sans text-left'
+                      }
+                    `}
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: item.content }} />
+                  </div>
+                </Link>
               </div>
             </motion.div>
           ))}
