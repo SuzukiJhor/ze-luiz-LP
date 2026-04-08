@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { BookOpen } from 'lucide-react'
 import { useState } from 'react'
 
-export default function Timeline () {
+export default function Timeline() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   const timeline = [

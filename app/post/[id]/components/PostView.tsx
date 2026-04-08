@@ -18,7 +18,7 @@ export default function PostView({
 }) {
 
   const isPoesia = post.section === 'POESIA'
-  const parentPath = isPoesia ? '/poesia' : '/poesia'
+  const parentPath = isPoesia ? '/poesia' : '/docente'
   const parentName = isPoesia ? 'Poesia & Música' : 'Docência'
 
   const currentIndex = posts.findIndex(p => p.id === post.id)
