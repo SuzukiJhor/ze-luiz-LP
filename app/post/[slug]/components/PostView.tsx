@@ -8,6 +8,7 @@ import ButtonDownloadDocument from './ButtonDownloadDocument'
 import PostImage from './PostImage'
 import GoBack from './GoBack'
 import { Post } from '@/app/types/post'
+import { generateSlugUrl } from '@/app/lib/lslug'
 
 export default function PostView({
   post,
@@ -25,6 +26,10 @@ export default function PostView({
 
   const prevPost = posts[currentIndex - 1]
   const nextPost = posts[currentIndex + 1]
+
+  function getSlugUrl(post: Post) {
+    return generateSlugUrl(post.id, post.title)
+  }
 
   return (
     <div className='min-h-screen bg-surface text-white flex flex-col'>
@@ -65,7 +70,7 @@ export default function PostView({
 
             {prevPost ? (
               <Link
-                href={`/post/${prevPost.id}`}
+                href={`/post/${getSlugUrl(prevPost)}`}
                 className='flex-1 p-4 rounded-xl border border-border hover:border-primary transition'
               >
                 <p className='text-xs text-muted mb-1'>
@@ -80,7 +85,7 @@ export default function PostView({
 
             {nextPost ? (
               <Link
-                href={`/post/${nextPost.id}`}
+                href={`/post/${getSlugUrl(nextPost)}`}
                 className='flex-1 p-4 rounded-xl border border-border text-right hover:border-primary transition'
               >
                 <p className='text-xs text-muted mb-1'>

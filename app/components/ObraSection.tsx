@@ -37,7 +37,6 @@ export default function ObraSection () {
     <section
       id='obra'
       className={`relative py-24 px-6 md:px-12 lg:px-24 overflow-hidden
-        /* MANTIDO O FUNDO ESCURO: Transição para um Azul/Grafite Profundo */
         bg-linear-to-b from-background via-[#0a0f1a] to-[#020617]`}
     >
       <motion.div

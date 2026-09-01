@@ -5,36 +5,49 @@ import { format } from 'date-fns'
 import { Post } from '../types/post'
 import { ptBR } from 'date-fns/locale'
 import { Calendar, FileText, Music } from 'lucide-react'
+import { useState } from 'react'
+import { generateSlugUrl } from '../lib/lslug'
 
 interface PostCardProps {
   post: Post
   variant?: 'default' | 'compact'
 }
 
-export function PostCard ({ post, variant = 'default' }: PostCardProps) {
+export function PostCard({ post, variant = 'default' }: PostCardProps) {
   const isDocencia = true
+  const [imageLoading, setImageLoading] = useState(true)
+
   return (
-    <Link href={`/post/${post.id}`}>
+    <Link href={`/post/${generateSlugUrl(post.id, post.title)}`}>
       <article
         className={`
         group relative rounded-xl overflow-hidden transition-all duration-300
         bg-background/40 backdrop-blur-md border border-border
         hover:border-primary/40 hover:-translate-y-1 hover:shadow-2xl
-        ${
-          variant === 'compact'
+        ${variant === 'compact'
             ? 'flex items-center gap-4 p-4'
             : 'flex flex-col h-full'
-        }
+          }
         `}
       >
         {variant === 'default' && (
           <div className='aspect-video w-full overflow-hidden relative bg-black/20'>
             {post.coverImage ? (
-              <img
-                src={post.coverImage}
-                alt={post.title}
-                className='w-full h-full object-cover transition-transform duration-700 group-hover:scale-105'
-              />
+              <>
+                {imageLoading && (
+                  <div className='absolute inset-0 bg-surface-variant/40 animate-pulse flex items-center justify-center z-10'>
+                    <div className='w-full h-full bg-linear-to-r from-transparent via-white/5 to-transparent animate-shimmer' />
+                  </div>
+                )}
+
+                <img
+                  src={post.coverImage}
+                  alt={post.title}
+                  onLoad={() => setImageLoading(false)}
+                  className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${imageLoading ? 'opacity-0' : 'opacity-100'
+                    }`}
+                />
+              </>
             ) : (
               <div className='w-full h-full flex items-center justify-center bg-linear-to-br from-primary/10 to-transparent'>
                 {isDocencia ? (
@@ -60,9 +73,8 @@ export function PostCard ({ post, variant = 'default' }: PostCardProps) {
         )}
 
         <div
-          className={`flex flex-col flex-1 ${
-            variant === 'default' ? 'p-6' : ''
-          }`}
+          className={`flex flex-col flex-1 ${variant === 'default' ? 'p-6' : ''
+            }`}
         >
           <div className='flex items-center gap-2 text-xs text-muted-foreground mb-3'>
             <Calendar size={14} />

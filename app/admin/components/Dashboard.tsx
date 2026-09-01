@@ -26,7 +26,10 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true)
 
   const refreshData = async () => {
-    const data = await getPostsAction()
+    const { posts: data, pagination } = await getPostsAction({
+      published: true,
+      limit: 100,
+    })
     setPosts(data as Post[])
   }
 
@@ -45,7 +48,7 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       try {
         setIsLoading(true)
         await refreshData()

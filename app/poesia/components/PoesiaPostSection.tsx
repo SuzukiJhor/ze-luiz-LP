@@ -1,27 +1,41 @@
 import { motion } from 'framer-motion'
-import { Loader2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { Post } from '@/app/types/post'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { PostCard } from '@/app/components/PostCard'
 import { getPostsAction } from '@/app/actions/posts'
 import PoesiaPostTitleSection from './PoesiaPostTitleSection'
 import EmptyPosts from './EmptyState'
+import { Pagination } from '@/app/components/Pagination'
 
 export default function PoesiaPostsSection() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  const handlePageChange = (newPage: number) => {
+    setLoading(true)
+    setPage(newPage)
+    sectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true)
       try {
-        const allPosts = await getPostsAction()
-
-        const filtered = allPosts.filter(
-          post =>
-            post.published && post.section === 'POESIA'
-        ) as Post[]
-
-        setPosts(filtered)
+        const { posts: fetchedPosts, pagination } = await getPostsAction({
+          section: 'POESIA',
+          published: true,
+          page,
+          limit: 6,
+        })
+        setPosts(fetchedPosts as Post[])
+        setTotalPages(pagination.totalPages)
       } catch (error) {
         console.error('Erro ao carregar posts:', error)
       } finally {
@@ -30,10 +44,10 @@ export default function PoesiaPostsSection() {
     }
 
     fetchData()
-  }, [])
+  }, [page])
 
   return (
-    <section className='relative py-32 px-6 bg-surface overflow-hidden'>
+    <section ref={sectionRef} className='relative py-32 px-6 bg-surface overflow-hidden'>
       <div
         className='absolute top-0 left-0 w-full h-56 
       bg-linear-to-b from-background via-background/60 to-transparent 
@@ -85,6 +99,7 @@ export default function PoesiaPostsSection() {
                   <PostCard post={post} />
                 </motion.div>
               ))}
+
             </div>
           )}
         </section>
@@ -95,6 +110,14 @@ export default function PoesiaPostsSection() {
       bg-linear-to-t from-background via-background/60 to-transparent 
       pointer-events-none'
       />
+
+      <Pagination
+        totalPages={totalPages}
+        page={page}
+        loading={loading}
+        handlePageChange={handlePageChange}
+      />
+
     </section>
   )
 }

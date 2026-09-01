@@ -2,18 +2,50 @@
 
 import { prisma } from '../lib/prisma'
 import { revalidatePath } from 'next/cache'
-import { PostSection } from '@prisma/client'
 import sanitizeHtml from 'sanitize-html'
+import { PostSection } from '../types/post'
+import { extractIdFromSlug } from '../lib/lslug'
 
-export async function getPostsAction() {
+interface GetPostOptions {
+  section?: PostSection | 'ALL' | string | null
+  published?: boolean
+  page?: number
+  limit?: number
+}
+
+export async function getPostsAction(options: GetPostOptions = {}) {
+  const { section, published = true, page = 1, limit = 9 } = options
+  const skip = (page - 1) * limit
+  const shouldFilterSection = Boolean(section) && section !== 'ALL'
+
   try {
-    const posts = await prisma.post.findMany({
-      orderBy: { createdAt: 'desc' }
-    })
-    return posts
+    const where = {
+      ...(published !== undefined && { published }),
+      ...(shouldFilterSection && { section: section as PostSection }),
+    }
+
+    const [posts, total] = await Promise.all([
+      prisma.post.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.post.count({ where }),
+    ])
+
+    return {
+      posts,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    }
   } catch (error) {
     console.error('Erro ao buscar posts:', error)
-    return []
+    return { posts: [], pagination: { total: 0, page: 1, limit, totalPages: 0 } }
   }
 }
 
@@ -26,11 +58,11 @@ export async function savePostAction(formData: FormData) {
 
   const content = sanitizeHtml(rawContent, {
     allowedTags: [
-      'p', 'b', 'i', 'em', 'strong', 'u', 
+      'p', 'b', 'i', 'em', 'strong', 'u',
       'ul', 'ol', 'li',
       'a', 'blockquote', 'br',
-      'h1', 'h2', 'h3', 
-      'span', 'div' 
+      'h1', 'h2', 'h3',
+      'span', 'div'
     ],
     allowedAttributes: {
       a: ['href', 'target', 'rel'],
@@ -119,5 +151,44 @@ export async function togglePublishAction(id: number | string) {
   } catch (error) {
     console.error('Erro ao alterar status:', error)
     return { error: 'Falha ao alterar status de publicação' }
+  }
+}
+
+export async function getPostByIdAction(id: number | string) {
+  const numericId = Number(id)
+  if (isNaN(numericId) || numericId <= 0) {
+    return { error: 'ID inválido fornecido.' }
+  }
+
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: numericId },
+    })
+    if (!post) {
+      return { error: 'Publicação não encontrada.' }
+    }
+    return { post }
+  } catch (error) {
+    console.error(`Erro ao buscar post com ID ${id}:`, error)
+    return { error: 'Falha ao buscar publicação no banco de dados.' }
+  }
+}
+
+export async function getPostBySlugAction(slugParam: string) {
+  const numericId = extractIdFromSlug(slugParam)
+  if (!numericId || isNaN(numericId) || numericId <= 0) {
+    return { error: 'URL ou ID inválido fornecido.' }
+  }
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: numericId },
+    })
+    if (!post) {
+      return { error: 'Publicação não encontrada.' }
+    }
+    return { post }
+  } catch (error) {
+    console.error(`Erro ao buscar post:`, error)
+    return { error: 'Falha ao buscar publicação no banco de dados.' }
   }
 }
