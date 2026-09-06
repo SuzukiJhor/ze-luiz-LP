@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Playfair_Display, Inter } from 'next/font/google'
+import { PostProvider } from './context/PostsContext'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -19,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Ze Luiz do Candeeiro',
   description: 'Zé Luiz do Candeeiro é a beleza do cotidiano traduzida em arte',
+  verification: {
+    google: 'gHYU7W7nw-LE1x53UMqbQ_TmGbwzHhOwecArFIOG2no',
+  },
   icons: {
     icon: '/mandala-remove.png',
     apple: '/mandala-remove.png'
@@ -35,7 +39,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>{children}</main>
+        <PostProvider>
+          <main>{children}</main>
+        </PostProvider>
       </body>
     </html>
   )

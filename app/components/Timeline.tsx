@@ -1,11 +1,13 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen } from 'lucide-react'
-import { useState } from 'react'
+import { BookOpen, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState, useRef } from 'react'
 
 export default function Timeline() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [isExpanded, setIsExpanded] = useState(false)
+  const timelineTopRef = useRef<HTMLDivElement>(null)
 
   const timeline = [
     {
@@ -67,6 +69,9 @@ e Matemática da UFPE.
     }
   ]
 
+  const visibleCount = 2
+  const visibleItems = isExpanded ? timeline : timeline.slice(0, visibleCount)
+
   return (
     <section className='relative py-32 px-6 bg-surface overflow-hidden'>
       <div className='text-center space-y-4 max-w-3xl mx-auto mt-2'>
@@ -87,13 +92,8 @@ e Matemática da UFPE.
         </motion.div>
       </div>
 
-      <div
-        className='absolute top-0 left-0 w-full h-40 
-                bg-linear-to-b from-background via-background/80 to-transparent 
-                pointer-events-none z-10'
-      />
+      <div ref={timelineTopRef} className='scroll-mt-10 max-w-3xl mx-auto mt-16 relative'>
 
-      <div className='max-w-4xl mx-auto text-center relative mt-16'>
         <motion.div
           animate={{ y: [-10, 10, -10] }}
           transition={{ duration: 6, repeat: Infinity }}
@@ -109,18 +109,16 @@ e Matemática da UFPE.
         >
           ✦
         </motion.div>
-
         <div className='max-w-5xl mx-auto'>
           <h2 className='text-4xl font-bold text-primary text-center mb-12'>
             Trajetória
           </h2>
-
-          <p className='text-center text-muted-foreground text-sm mb-16'>
+          <p className='text-center text-muted-foreground text-sm mb-12'>
             Clique em uma etapa da linha do tempo para ler mais detalhes
           </p>
 
-          <div className='relative border-l border-border pb-32'>
-            {timeline.map((item, index) => (
+          <div className='relative border-l border-border ml-4 md:ml-8'>
+            {visibleItems.map((item, index) => (
               <div key={index}>
                 <motion.div
                   initial={{ opacity: 0, x: -40 }}
@@ -172,6 +170,36 @@ e Matemática da UFPE.
             ))}
           </div>
         </div>
+
+        {!isExpanded && (
+          <div className='absolute bottom-12 inset-x-0 h-32 bg-gradient-to-t from-surface via-surface/80 to-transparent pointer-events-none' />
+        )}
+
+        <AnimatePresence>
+          {!isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.25 }}
+              className="relative z-10 flex justify-center mt-4"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsExpanded(true)}
+                className="px-8 py-3.5 rounded-full bg-primary/10 hover:bg-primary/20 
+                   border border-primary/30 hover:border-primary 
+                   text-primary font-medium text-base backdrop-blur-md 
+                   flex items-center gap-2 shadow-lg transition-all 
+                   cursor-pointer group"
+              >
+                Ver Trajetória Completa
+                <ChevronDown className="w-5 h-5 transition-transform duration-300 group-hover:translate-y-0.5" />
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )

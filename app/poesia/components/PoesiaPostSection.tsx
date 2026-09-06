@@ -1,39 +1,39 @@
+'use client'
+
 import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
-import { Post } from '@/app/types/post'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PostCard } from '@/app/components/PostCard'
-import { getPostsAction } from '@/app/actions/posts'
 import PoesiaPostTitleSection from './PoesiaPostTitleSection'
 import EmptyPosts from './EmptyState'
+import { Pagination } from '@/app/components/Pagination'
+import { usePostContext } from '@/app/context/PostsContext'
 
 export default function PoesiaPostsSection() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
+  const { posts, pagination, loading, fetchPosts } = usePostContext()
+  const [currentPage, setCurrentPage] = useState(1)
+  const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const allPosts = await getPostsAction()
+    fetchPosts({
+      section: 'POESIA',
+      published: true,
+      limit: 6,
+      page: currentPage,
+    })
+  }, [currentPage])
 
-        const filtered = allPosts.filter(
-          post =>
-            post.published && post.section === 'POESIA'
-        ) as Post[]
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
 
-        setPosts(filtered)
-      } catch (error) {
-        console.error('Erro ao carregar posts:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
+    sectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
 
   return (
-    <section className='relative py-32 px-6 bg-surface overflow-hidden'>
+    <section ref={sectionRef} className='relative py-32 px-6 bg-surface overflow-hidden'>
       <div
         className='absolute top-0 left-0 w-full h-56 
       bg-linear-to-b from-background via-background/60 to-transparent 
@@ -94,6 +94,13 @@ export default function PoesiaPostsSection() {
         className='absolute bottom-0 left-0 w-full h-56 
       bg-linear-to-t from-background via-background/60 to-transparent 
       pointer-events-none'
+      />
+
+      <Pagination
+        totalPages={pagination?.totalPages || 1}
+        page={currentPage}
+        loading={loading}
+        handlePageChange={handlePageChange}
       />
     </section>
   )

@@ -2,39 +2,42 @@
 
 import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
-import { Post } from '@/app/types/post'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { PostCard } from '@/app/components/PostCard'
-import { getPostsAction } from '@/app/actions/posts'
 import EmptyPosts from '@/app/poesia/components/EmptyState'
 import DocenciaPostTitleSection from './DocenciaPostTitleSection'
+import { Pagination } from '@/app/components/Pagination'
+import { usePostContext } from '@/app/context/PostsContext'
 
 export default function DocenciaPostsSection() {
-    const [posts, setPosts] = useState<Post[]>([])
-    const [loading, setLoading] = useState(true)
+    const { posts, pagination, loading, fetchPosts } = usePostContext()
+    const sectionRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const allPosts = await getPostsAction()
+        fetchPosts({
+            section: 'DOCENCIA',
+            published: true,
+            limit: 6,
+            page: pagination.page || 1,
+        })
+    }, [pagination.page])
 
-                const filtered = allPosts.filter(
-                    post => post.published && post.section === 'DOCENCIA'
-                ) as Post[]
+    const handlePageChange = (newPage: number) => {
+        fetchPosts({
+            section: 'DOCENCIA',
+            published: true,
+            limit: 6,
+            page: newPage,
+        })
 
-                setPosts(filtered)
-            } catch (error) {
-                console.error('Erro ao carregar posts de docência:', error)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchData()
-    }, [])
+        sectionRef.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        })
+    }
 
     return (
-        <section className='relative py-20 px-6 bg-surface'>
+        <section ref={sectionRef} className='relative py-20 px-6 bg-surface'>
             <DocenciaPostTitleSection title='Publicações Acadêmicas & Docência' />
 
             <div className='max-w-6xl mx-auto'>
@@ -66,6 +69,13 @@ export default function DocenciaPostsSection() {
                     </div>
                 )}
             </div>
+
+            <Pagination
+                totalPages={pagination.totalPages}
+                page={pagination.page}
+                loading={loading}
+                handlePageChange={handlePageChange}
+            />
         </section>
     )
 }
