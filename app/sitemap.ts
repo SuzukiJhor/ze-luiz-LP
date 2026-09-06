@@ -4,8 +4,7 @@ import { Post } from '@/app/types/post'
 import { generateSlugUrl } from './lib/lslug'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zeluizdocandeeiro.com.br'
-
+    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zeluizdocandeeiro.com.br').replace(/\/$/, '');
     let posts: Post[] = []
 
     try {

@@ -2,27 +2,28 @@ import { Footer } from '@/app/components/Footer'
 import { Navbar } from '@/app/components/Navbar'
 import { getPostByIdAction, getPostBySlugAction, getPostsAction } from '@/app/actions/posts'
 import { Post } from '@/app/types/post'
-import { Loader2 } from 'lucide-react'
 import PostView from './components/PostView'
 import GoBack from './components/GoBack'
-import { generateSlugUrl } from '@/app/lib/lslug'
 import { Metadata } from 'next'
 
 interface PageProps {
-  params: Promise<{ id: string; slug?: string }>
+  params: Promise<{ id?: string; slug?: string }>
 }
 
+// 1. GERAÇÃO DE METADADOS (SERVER-SIDE)
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const identifier = resolvedParams.slug || resolvedParams.id
+  const { slug, id } = resolvedParams
 
-  if (!identifier) {
-    return { title: 'Publicação não encontrada' }
+  let post: Post | null = null
+
+  if (slug) {
+    const res = await getPostBySlugAction(slug)
+    post = res.post as Post
+  } else if (id) {
+    const res = await getPostByIdAction(id)
+    post = res.post as Post
   }
-
-  const { post } = resolvedParams.slug
-    ? await getPostBySlugAction(resolvedParams.slug)
-    : await getPostByIdAction(identifier)
 
   if (!post) {
     return { title: 'Publicação não encontrada' }
@@ -46,41 +47,40 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+// 2. PÁGINA PRINCIPAL (SERVER COMPONENT)
 export default async function Page({ params }: PageProps) {
-  const resolvedParams = await params
-  const slug = resolvedParams.slug
-  const id = resolvedParams.id
+  const { slug, id } = await params
 
   let post: Post | null = null
   let posts: Post[] = []
 
   try {
+    // Busca direta e eficiente do post atual
+    if (slug) {
+      const res = await getPostBySlugAction(slug)
+      post = (res.post as Post) || null
+    } else if (id) {
+      const res = await getPostByIdAction(id)
+      post = (res.post as Post) || null
+    }
+
+    // Busca os demais posts (apenas se necessário para sugestões/relacionados dentro do PostView)
     const { posts: fetchedPosts } = await getPostsAction({
       published: true,
-      limit: 100,
+      limit: 10,
     })
     posts = (fetchedPosts as Post[]) || []
-
-    if (slug) {
-      const { post: postBySlug } = await getPostBySlugAction(slug)
-      post = (postBySlug as Post) || posts.find((p) => generateSlugUrl(p.id, p.title) === slug) || null
-    } else if (id) {
-      post = posts.find((p) => p.id === Number(id)) || null
-    }
   } catch (error) {
     console.error('Erro ao carregar o post no servidor:', error)
   }
 
   if (!post) {
-    const parentPath = '/poesia'
-    const parentName = 'Poesia & Música'
-
     return (
       <>
         <Navbar />
         <div className="min-h-screen bg-background text-white px-6 pt-32">
           <div className="max-w-3xl mx-auto">
-            <GoBack parentPath={parentPath} parentName={parentName} />
+            <GoBack parentPath="/poesia" parentName="Poesia & Música" />
             <div className="flex items-center justify-center mt-32">
               <div className="text-center">
                 <h1 className="text-2xl font-serif mb-2">Publicação não encontrada</h1>

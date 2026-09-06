@@ -3,37 +3,20 @@
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
-import { Post } from '../types/post'
-import { getPostsAction } from '../actions/posts'
+import { useEffect, useRef } from 'react'
 import { generateSlugUrl } from '../lib/lslug'
+import { usePostContext } from '../context/PostsContext'
 
 export default function Fragment() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const { posts, loading, fetchPosts } = usePostContext()
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const { posts: fetchedPosts, pagination } = await getPostsAction({
-          published: true,
-          limit: 9,
-        })
-
-        setPosts(fetchedPosts as Post[])
-        setTotalPages(pagination.totalPages)
-      } catch (error) {
-        console.error('Erro ao carregar posts:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [page])
+    fetchPosts({
+      published: true,
+      limit: 9,
+    })
+  }, [])
 
   if (!posts.length || loading) return null
 
@@ -43,7 +26,6 @@ export default function Fragment() {
         <div className='flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-12 md:mb-16'>
           <div>
             <h2 className='text-3xl md:text-4xl font-bold mb-3'>Fragmentos</h2>
-
             <p className='text-muted'>Últimas publicações e reflexões</p>
           </div>
 
@@ -65,11 +47,13 @@ export default function Fragment() {
                 whileHover={{ y: -10 }}
                 className='relative h-80 md:h-100 rounded-xl overflow-hidden group'
               >
-                <img
-                  src={item.coverImage}
-                  alt={item.title}
-                  className='object-cover w-full h-full group-hover:scale-105 transition duration-700'
-                />
+                {item.coverImage && (
+                  <img
+                    src={item.coverImage}
+                    alt={item.title}
+                    className='object-cover w-full h-full group-hover:scale-105 transition duration-700'
+                  />
+                )}
 
                 <div className='absolute inset-0 bg-linear-to-t from-background via-background/60 to-transparent' />
 

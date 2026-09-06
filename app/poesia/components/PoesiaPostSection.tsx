@@ -1,50 +1,36 @@
+'use client'
+
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
-import { Post } from '@/app/types/post'
-import { useEffect, useState, useRef } from 'react'
+import { Loader2 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { PostCard } from '@/app/components/PostCard'
-import { getPostsAction } from '@/app/actions/posts'
 import PoesiaPostTitleSection from './PoesiaPostTitleSection'
 import EmptyPosts from './EmptyState'
 import { Pagination } from '@/app/components/Pagination'
+import { usePostContext } from '@/app/context/PostsContext'
 
 export default function PoesiaPostsSection() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const { posts, pagination, loading, fetchPosts } = usePostContext()
+  const [currentPage, setCurrentPage] = useState(1)
   const sectionRef = useRef<HTMLElement>(null)
 
+  useEffect(() => {
+    fetchPosts({
+      section: 'POESIA',
+      published: true,
+      limit: 6,
+      page: currentPage,
+    })
+  }, [currentPage])
+
   const handlePageChange = (newPage: number) => {
-    setLoading(true)
-    setPage(newPage)
+    setCurrentPage(newPage)
+
     sectionRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     })
   }
-
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true)
-      try {
-        const { posts: fetchedPosts, pagination } = await getPostsAction({
-          section: 'POESIA',
-          published: true,
-          page,
-          limit: 6,
-        })
-        setPosts(fetchedPosts as Post[])
-        setTotalPages(pagination.totalPages)
-      } catch (error) {
-        console.error('Erro ao carregar posts:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [page])
 
   return (
     <section ref={sectionRef} className='relative py-32 px-6 bg-surface overflow-hidden'>
@@ -99,7 +85,6 @@ export default function PoesiaPostsSection() {
                   <PostCard post={post} />
                 </motion.div>
               ))}
-
             </div>
           )}
         </section>
@@ -112,12 +97,11 @@ export default function PoesiaPostsSection() {
       />
 
       <Pagination
-        totalPages={totalPages}
-        page={page}
+        totalPages={pagination?.totalPages || 1}
+        page={currentPage}
         loading={loading}
         handlePageChange={handlePageChange}
       />
-
     </section>
   )
 }
